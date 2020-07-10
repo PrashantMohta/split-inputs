@@ -18,7 +18,14 @@
         <input type="text"><input type="text"><input type="text"><input type="text">
     </split-input>
 
-    
+
 <script src="split-inputs.js" onload="splitInputs.init({disableCE:0});"></script>
+<script>
+    let element = document.querySelectorAll('split-input');
+    for(let i =0;i < element.length;i++){
+        element[i].addEventListener('split-input-value-change',(v)=>console.log(v.detail));
+        element[i].addEventListener('split-input-value-complete',(v)=>console.log(v.detail));
+    }
+</script>
 </body>
 </html>

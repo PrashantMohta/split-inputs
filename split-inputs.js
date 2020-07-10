@@ -30,19 +30,33 @@ class splitInput{
         for(let i = 0; i < this.boxes.length; i++){
             this.boxes[i].value = this._value[i];
         }
+        let val = this.value
+        if(this._lastValue !== val){
+            this._lastValue = val;
+            this.root.dispatchEvent(new CustomEvent('split-input-value-change',{detail:{value:val,boxes:this._value}}));
+            if(val.length === this.count){
+                this.root.dispatchEvent(new CustomEvent('split-input-value-complete',{detail:{value:val,boxes:this._value}}));
+            }
+        }
     }
 
     keydown($event){
         if($event.ctrlKey || $event.metaKey) return setTimeout( () => this.updateValues(),0);
 
         let index = $event.target.splitInput.index;
-        if(this.tryIfValid($event.key))  this._value[index] = $event.key;
+        let isValid = this.tryIfValid($event.key);
+        if(isValid)  this._value[index] = $event.key;
 
         if ($event.key === 'Backspace') {
             if(this._value[index].length === 0) {
                 setTimeout( () => this.setFocus(-1,index),0);
             }
             this._value[index] = '';
+        }
+
+        if(isValid){
+            let isNextBoxEmpty = (this._value.length > index+1 && this._value[index+1].length === 0);
+            if((!this.userControl || isNextBoxEmpty) && this._value[index].length > 0) return setTimeout( () => this.setFocus(1,index),0);
         }
 
         setTimeout( () => this.updateValues(),0);
@@ -80,11 +94,21 @@ class splitInput{
             this.userControl = true;
             return this.setFocus(1,index);
         }
-
-        let isNextBoxEmpty = (this._value.length > index+1 && this._value[index+1].length === 0);
-        if((!this.userControl || isNextBoxEmpty) && this._value[index].length > 0) return this.setFocus(1,index);
     }
 
+    get value(){
+        return this._value.join('');
+    }
+    set value(str){
+        if(!str || typeof str === 'number') throw `split-input : value(${str}) must be a string`;
+        if(str.length !== this.count) throw `split-input : length of value (${str.length}) is not the same as split-input (${this.count})`;
+        if(!this.isValid(str)) throw `split-input : '${str}' not a valid value for split-input`;
+
+        for(let i =0 ; i < str.length ; i++){
+            this._value[i] = str[i];
+        }
+        this.updateValues();
+    }
     constructor(root,charValidator,pasteValidator){
         if(!window.splitInputsStylesAdded){
             document.head.prepend(splitInputs.getStyles());
@@ -116,12 +140,14 @@ class splitInput{
             for(let i = 0 ;i< this.count; i++){
                 let inpTemp = document.createElement('input');
                 inpTemp.type = this.numeric ? 'tel' : 'text';
+                inpTemp.maxLength = 1;
                 this.boxes.push(inpTemp);
                 this.root.appendChild(inpTemp);
             }
         }
 
         this._value = [];
+        this._lastValue = '';
         for(let i = 0; i < this.boxes.length; i++){
             this._value.push(this.boxes[i].value);
             this.boxes[i].splitInput = { index : i };
@@ -144,13 +170,14 @@ class splitInputCustomElement extends HTMLElement {
         this.shadow.innerHTML = this.innerHTML;
         this.innerHTML = '';
         this.cloneStyles();
-        new splitInput(this.shadow,this.charValidator,this.pasteValidator);
+        this.splitInput = new splitInput(this.shadow,this.charValidator,this.pasteValidator);
     }
     constructor(charValidator,pasteValidator){
         super();
         this.charValidator = charValidator;
         this.pasteValidator = pasteValidator;
         this.shadow = this.attachShadow({mode: 'open'});
+        this.shadow.dispatchEvent= (...args) => this.dispatchEvent(...args);
         this.shadow.getAttribute = (...args) => this.getAttribute(...args);
         this.shadow.setAttribute = (...args) => this.setAttribute(...args);
     }
