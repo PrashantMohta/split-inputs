@@ -26,6 +26,11 @@
         element[i].addEventListener(splitInputs.CHANGE_EVENT,(v)=>console.log(v.detail));
         element[i].addEventListener(splitInputs.COMPLETE_EVENT,(v)=>console.log(v.detail));
     }
+
+    setTimeout(()=>{
+        document.querySelector('split-input').splitInput.value = "fill"
+        document.querySelector('split-input').splitInput.focus(3)
+    },1000)
 </script>
 </body>
 </html>

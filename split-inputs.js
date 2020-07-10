@@ -62,6 +62,9 @@ class splitInput{
         setTimeout( () => this.updateValues(),0);
     }
 
+    focus(n = 0){
+        this.setFocus(0,n);
+    }
     setFocus(n,index){
         if(index + n >= 0 && index + n < this.count ){
             this.boxes[index + n].focus();
@@ -140,7 +143,6 @@ class splitInput{
             for(let i = 0 ;i< this.count; i++){
                 let inpTemp = document.createElement('input');
                 inpTemp.type = this.numeric ? 'tel' : 'text';
-                inpTemp.maxLength = 1;
                 this.boxes.push(inpTemp);
                 this.root.appendChild(inpTemp);
             }
@@ -150,6 +152,7 @@ class splitInput{
         this._lastValue = '';
         for(let i = 0; i < this.boxes.length; i++){
             this._value.push(this.boxes[i].value);
+            this.boxes[i].maxLength = 1;
             this.boxes[i].splitInput = { index : i };
             this.boxes[i].addEventListener('keyup',(...arg)=>this.keyup(...arg));
             this.boxes[i].addEventListener('keydown',(...arg)=>this.keydown(...arg));
