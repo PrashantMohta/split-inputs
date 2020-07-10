@@ -1,8 +1,16 @@
 <html>
-<head><title>split-inputs</title></head>
+<head>
+    <title>split-inputs</title>
+<style split-input>
+    :host([custom-style]) input,split-input[custom-style] input{
+            width: 50px;
+            margin: 15px;
+        }
+</style>
+</head>
 <body>
 
-    <split-input count="4" type="alpha"></split-input> <hr>
+    <split-input custom-style count="4" type="alpha"></split-input> <hr>
 
     <split-input count="6" type="numeric"></split-input> <hr>
 
@@ -11,146 +19,6 @@
     </split-input>
 
     
-<script>
-    class splitInput{
-        tryIfValid(Char){
-            // can be overwritten in constructor
-
-            //only single chars
-            if(Char.length > 1) return false;
-
-            // numeric alpha or alphanumeric
-            if(this.numeric)
-                return '1234567890'.includes(Char);
-            else if(this.alpha)
-                return /^[a-zA-Z]+$/.test(Char);
-
-            return '1234567890'.includes(Char) || /^[a-zA-Z]+$/.test(Char);
-        }
-
-        isValid(text){
-            // can be overwritten in constructor
-            for(let i=0;i < text.length;i++){
-               if(!this.tryIfValid(text[i])){
-                   return false;
-               }
-            }
-            return true;
-        }
-
-        updateValues(){
-            for(var i = 0; i < this.boxes.length; i++){
-                this.boxes[i].value = this._value[i];
-            }
-        }
-
-        keydown($event){
-            if($event.ctrlKey || $event.metaKey) return setTimeout( () => this.updateValues(),0);
-
-            let index = $event.target.splitInput.index;
-            if(this.tryIfValid($event.key))  this._value[index] = $event.key;
-
-            if ($event.key === 'Backspace') {
-                if(this._value[index].length === 0) {
-                    setTimeout( () => this.setFocus(-1,index),0);
-                }
-                this._value[index] = '';
-            }
-
-            setTimeout( () => this.updateValues(),0);
-        }
-
-        setFocus(n,index){
-            if(index + n >= 0 && index + n < this.count ){
-                this.boxes[index + n].focus();
-            }
-        }
-
-        paste($event){
-            let index = $event.target.splitInput.index;
-            let paste = (event.clipboardData || window.clipboardData).getData('text');
-            $event.target.blur();
-
-            if( paste.length !== this.count || !this.isValid(paste)) return;
-
-            for(let i=0;i < this.count;i++){
-                this._value[i] = paste[i];
-                this.boxes[i].value = paste[i];
-            }
-        }
-
-        keyup($event){
-            let index = $event.target.splitInput.index;
-            setTimeout( () => this.updateValues(),0);
-            if($event.ctrlKey || $event.metaKey || $event.key === 'Backspace') return;
-
-            if($event.key === 'ArrowLeft')    return this.setFocus(-1,index);
-            if($event.key === 'ArrowRight')   return this.setFocus(1,index);
-
-            if(this._value[index].length > 0) return this.setFocus(1,index);
-        }
-
-        constructor(root,charValidator,pasteValidator){
-            this.root = root;
-            this.root.splitInput = this;
-
-            if(charValidator && typeof charValidator === 'function'){
-                this.tryIfValid = charValidator;
-            }
-
-            if(pasteValidator && typeof pasteValidator === 'function'){
-                this.isValid = pasteValidator;
-            }
-
-            this.type = this.root.getAttribute('type')
-
-            this.alpha = this.type === 'alpha';
-            this.numeric = this.type === 'numeric';
-            this.alphanumeric = this.type === 'alphanumeric' || (!this.alpha && !this.numeric);
-
-            this.boxes = this.root.querySelectorAll('input');
-            this.count = this.boxes.length;
-            if(!this.count){
-                //input boxes are not defined, so we must generate
-                this.count = parseInt(this.root.getAttribute('count')) || 4;
-                this.boxes = [];
-                for(let i = 0 ;i< this.count; i++){
-                    let inpTemp = document.createElement('input');
-                    inpTemp.type = this.numeric ? 'tel' : 'text';
-                    this.boxes.push(inpTemp);
-                    this.root.appendChild(inpTemp);
-                }
-            }
-
-            this._value = [];
-            for(var i = 0; i < this.boxes.length; i++){
-                this._value.push(this.boxes[i].value);
-                this.boxes[i].splitInput = { index : i };
-                this.boxes[i].addEventListener('keyup',(...arg)=>this.keyup(...arg));
-                this.boxes[i].addEventListener('keydown',(...arg)=>this.keydown(...arg));
-                this.boxes[i].addEventListener('paste',(...arg)=>this.paste(...arg))
-            }
-        }
-    }
-
-    class splitInputCE extends HTMLElement {
-        constructor(charValidator,pasteValidator){
-            super();
-            this.splitInput = new splitInput(this,charValidator,pasteValidator);
-        }
-    }
-
-    if(window.customElements){
-        window.customElements.define('split-input', splitInputCE);
-    } else {
-        $ = (...rest) => document.querySelectorAll(...rest);
-        var parents = $('split-input')
-        for(var i = 0; i < parents.length; i++){
-            new splitInput(parents[i])
-        }
-    }
-
-
-</script>
+<script src="split-inputs.js" onload="splitInputs.init({disableCE:0});"></script>
 </body>
 </html>
