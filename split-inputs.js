@@ -72,10 +72,17 @@ class splitInput{
         setTimeout( () => this.updateValues(),0);
         if($event.ctrlKey || $event.metaKey || $event.key === 'Backspace') return;
 
-        if($event.key === 'ArrowLeft')    return this.setFocus(-1,index);
-        if($event.key === 'ArrowRight')   return this.setFocus(1,index);
+        if($event.key === 'ArrowLeft') {
+            this.userControl = true;
+            return this.setFocus(-1,index);
+        }
+        if($event.key === 'ArrowRight') {
+            this.userControl = true;
+            return this.setFocus(1,index);
+        }
 
-        if(this._value[index].length > 0) return this.setFocus(1,index);
+        let isNextBoxEmpty = (this._value.length > index+1 && this._value[index+1].length === 0);
+        if((!this.userControl || isNextBoxEmpty) && this._value[index].length > 0) return this.setFocus(1,index);
     }
 
     constructor(root,charValidator,pasteValidator){
@@ -85,7 +92,7 @@ class splitInput{
         }
         this.root = root;
         this.root.splitInput = this;
-
+        this.userControl = false;
         if(charValidator && typeof charValidator === 'function'){
             this.tryIfValid = charValidator;
         }
