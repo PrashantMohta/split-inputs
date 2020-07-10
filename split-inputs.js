@@ -33,9 +33,9 @@ class splitInput{
         let val = this.value
         if(this._lastValue !== val){
             this._lastValue = val;
-            this.root.dispatchEvent(new CustomEvent('split-input-value-change',{detail:{value:val,boxes:this._value}}));
+            this.root.dispatchEvent(new CustomEvent(splitInputs.CHANGE_EVENT,{detail:{value:val,boxes:this._value}}));
             if(val.length === this.count){
-                this.root.dispatchEvent(new CustomEvent('split-input-value-complete',{detail:{value:val,boxes:this._value}}));
+                this.root.dispatchEvent(new CustomEvent(splitInputs.COMPLETE_EVENT,{detail:{value:val,boxes:this._value}}));
             }
         }
     }
@@ -184,7 +184,8 @@ class splitInputCustomElement extends HTMLElement {
 }
 
 class splitInputs {
-
+    static CHANGE_EVENT = 'split-input-value-change';
+    static COMPLETE_EVENT = 'split-input-value-complete';
     static getStyles(){
         let componentStyles = document.createElement('link');
         componentStyles.rel = 'stylesheet';

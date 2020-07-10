@@ -23,8 +23,8 @@
 <script>
     let element = document.querySelectorAll('split-input');
     for(let i =0;i < element.length;i++){
-        element[i].addEventListener('split-input-value-change',(v)=>console.log(v.detail));
-        element[i].addEventListener('split-input-value-complete',(v)=>console.log(v.detail));
+        element[i].addEventListener(splitInputs.CHANGE_EVENT,(v)=>console.log(v.detail));
+        element[i].addEventListener(splitInputs.COMPLETE_EVENT,(v)=>console.log(v.detail));
     }
 </script>
 </body>
