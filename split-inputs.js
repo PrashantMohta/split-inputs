@@ -197,7 +197,7 @@ class splitInputs {
         return componentStyles;
     }
 
-    static init(options = {}){
+    static init(options = {disableCE:false}){
         if(!options.disableCE && window.customElements){
             window.customElements.define('split-input', splitInputCustomElement);
         } else {

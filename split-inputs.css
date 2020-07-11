@@ -4,9 +4,17 @@ input {
     text-align: center;
     font-size: 20px;
     color: transparent;
-    box-shadow: none;
+    box-shadow: 0px 2px 5px -2px #00000030;
     text-shadow: 0 0 0 #040404;
-    border-color: #040404;
+    border-color: #dcdcdcfc;
     border-width: 1px;
     border-radius: 5px;
+    border-style: solid;
+    outline-color: #040404;
+    transition: 0.3s;
+}
+
+input:focus{
+    transform: scale(1.1);
+    transition: 0.1s;
 }

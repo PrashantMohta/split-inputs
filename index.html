@@ -1,11 +1,12 @@
 <html>
 <head>
     <title>split-inputs</title>
-<style split-input>
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSIuOWVtIiBmb250LXNpemU9IjkwIj7wn46yPC90ZXh0Pjwvc3ZnPgo=">
+    <style split-input>
     :host([custom-style]) input,split-input[custom-style] input{
-            width: 50px;
-            margin: 15px;
-        }
+        width: 50px;
+        margin: 15px;
+    }
 </style>
 </head>
 <body>
@@ -19,7 +20,7 @@
     </split-input>
 
 
-<script src="split-inputs.js" onload="splitInputs.init({disableCE:0});"></script>
+<script src="split-inputs.js" onload="splitInputs.init();"></script>
 <script>
     let element = document.querySelectorAll('split-input');
     for(let i =0;i < element.length;i++){
