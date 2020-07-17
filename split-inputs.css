@@ -1,3 +1,6 @@
+:host{
+    display:block;
+}
 input {
     width: 25px;
     margin: 5px;
@@ -5,13 +8,13 @@ input {
     font-size: 20px;
     color: transparent;
     box-shadow: 0px 2px 5px -2px #00000030;
-    text-shadow: 0 0 0 #040404;
+    text-shadow: 0 0 0 #040404bb;
     border-color: #dcdcdcfc;
     border-width: 1px;
     border-radius: 5px;
     border-style: solid;
-    outline-color: #040404;
-    transition: 0.3s;
+    outline-color: #040404bb;
+    transition: 0.3s transform;
 }
 
 input:focus{

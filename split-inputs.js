@@ -179,7 +179,7 @@ class splitInputCustomElement extends HTMLElement {
         super();
         this.charValidator = charValidator;
         this.pasteValidator = pasteValidator;
-        this.shadow = this.attachShadow({mode: 'open'});
+        this.shadow = this.attachShadow({mode: 'closed'});
         this.shadow.dispatchEvent= (...args) => this.dispatchEvent(...args);
         this.shadow.getAttribute = (...args) => this.getAttribute(...args);
         this.shadow.setAttribute = (...args) => this.setAttribute(...args);
@@ -197,7 +197,9 @@ class splitInputs {
         return componentStyles;
     }
 
-    static init(options = {disableCE:false}){
+    static init(options = {disableCE:false,loadedStyles:false}){
+        window.splitInputsStylesAdded = !!options.loadedStyles;
+
         if(!options.disableCE && window.customElements){
             window.customElements.define('split-input', splitInputCustomElement);
         } else {

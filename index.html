@@ -1,37 +1,182 @@
 <html>
 <head>
-    <title>split-inputs</title>
-    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSIuOWVtIiBmb250LXNpemU9IjkwIj7wn46yPC90ZXh0Pjwvc3ZnPgo=">
-    <style split-input>
-    :host([custom-style]) input,split-input[custom-style] input{
-        width: 50px;
-        margin: 15px;
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Inputs</title>
+    <style>
+    body{
+        background:#e6e6e6;
+        color:#292e33;
+        font-family: sans-serif;
+        padding:0;
+        font-weight: lighter;
     }
-</style>
+    h2{
+        margin: 0;
+        font-size: 25px;
+        text-align: center;
+    }
+    h2 span{
+        letter-spacing: 15px;
+        background-color: #ff5584;
+        font-family: monospace;
+        padding: 0 0 0 15px;
+        text-transform: uppercase;
+    }
+    .header{
+        padding: 10px 25px;
+        margin: -8px;
+        background: #ff8ab0;
+        position: sticky;
+        top: 0;
+        box-sizing: border-box;
+        box-shadow: 1px 1px 3px 1px #c7c7c73d;
+    }
+    .header h3{
+        display: none;
+    }
+    .featurescontainer h3{
+        display: block;
+    }
+    h3{
+        margin-top:5px;
+        font-weight: lighter;
+        font-size: 15px;
+        display: inline;
+    }
+    h4{
+        margin-top:0px;
+    }
+    a,a:visited{
+        color:inherit;
+        text-decoration: none;
+        font-weight: normal;
+    }
+    a:hover{
+        font-weight: bold;
+    }
+    ul{
+        padding: 0 0 0 15px;
+        font-size: 14px;
+        list-style: devanagari;
+        line-height: 1.5;
+    }
+    li{
+        padding: 5px 0 5px 0;
+    }
+    split-input{
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+    .democontainer,.featurescontainer{
+        background: #f3f3f3;
+        padding: 25px;
+        border-radius: 5px;
+        margin: 15px 0px;
+        box-shadow: 1px 1px 3px 1px #c7c7c73d;
+    }
+
+    .demoblock{
+        text-align:center;
+        font-size: 12px;
+    }
+    @media(min-width:500px){
+        h2{
+            display:inline;
+        }
+        .header h3{
+            display: inline;
+        }
+        .featurescontainer h3{
+            display: none;
+        }
+        .container{
+            display:flex;
+            justify-content: space-between;
+        }
+        .featurescontainer{
+            width: 10vw;
+            min-width:150px;
+        }
+        .demos{
+            width: 85vw;
+            margin-left: 1vw;
+        }
+    }
+
+    article{
+        padding: 25px;
+        background: #f3f3f3;
+        box-shadow: 1px 1px 3px 1px #c7c7c73d;
+    }
+    </style>
+    <link rel="stylesheet" href="split-inputs.css" type="text/css">
 </head>
 <body>
+    <div class="header">
+        <h2> <span>Split</span> Inputs </h2>
+        <h3> A VanillaJS implementation of a set of inputs for entering OTPs </h3>
+    </div>
+    <div class="container">
+        <div class="featurescontainer">
+            <h3> A VanillaJS implementation of a set of inputs for entering OTPs </h3>
+            <h4>Features</h4>
+            <ul>
+                <li> <a href="#behaviour">Basic Behaviour</a>
+                <li> <a href="#markup">Markup Options</a>
+                <li> <a href="#web">Web Component </a>
+                <li> Restyle Inputs
+                <li> Events & JS API
+            </ul>
+        </div>
+        <div class="demos">
+            <div class="democontainer">
+                <h4>Numeric Split Inputs</h4>
+                <div class="demoblock">
+                    <split-input count="4" type="numeric"></split-input>
+                    Try entering numeric characters.
+                </div>
+            </div>
+            <div class="democontainer">
+                <h4>Alphabetical Split Inputs</h4>
+                <div class="demoblock">
+                    <split-input count="6" type="alpha"></split-input>
+                    Try entering alphabets.
+                </div>
+            </div>
+            <div class="democontainer">
+        <h4>Alphanumeric Split Inputs</h4>
+        <div class="demoblock">
+            <split-input count="6" type="alphanumeric"></split-input>
+            Try entering alphanumeric characters.
+        </div>
+    </div>
+        </div>
+    </div>
 
-    <split-input custom-style count="4" type="alpha"></split-input> <hr>
+    <article>
+        <section id="behaviour">
+            <h4>Basic Behaviour</h4>
+            <ul>
+                <li> Automatically moves focus to the next box when typing
+                <li> Supports arrow keys to move between boxes for corrections
+                <li> Backspace on empty box will focus previous box
+                <li> Typing in a filled box will overwrite the character in it
+                <li> Supports pasting an entire OTP in any box
+            </ul>
+        </section>
+        <section id="markup">
+            <h4>Markup</h4>
+            <ul>
+                <li> Generate boxes using count attribute
+                <li> Supports custom internal markup
+            </ul>
+        </section>
+        <section id="web">
+            <h4>Web Component</h4>
+            fallback to regular DOM elements if Custom Element is unsupported
+        </section>
+    </article>
 
-    <split-input count="6" type="numeric"></split-input> <hr>
-
-    <split-input type="alphanumeric">
-        <input type="text"><input type="text"><input type="text"><input type="text">
-    </split-input>
-
-
-<script src="split-inputs.js" onload="splitInputs.init();"></script>
-<script>
-    let element = document.querySelectorAll('split-input');
-    for(let i =0;i < element.length;i++){
-        element[i].addEventListener(splitInputs.CHANGE_EVENT,(v)=>console.log(v.detail));
-        element[i].addEventListener(splitInputs.COMPLETE_EVENT,(v)=>console.log(v.detail));
-    }
-
-    setTimeout(()=>{
-        document.querySelector('split-input').splitInput.value = "fill"
-        document.querySelector('split-input').splitInput.focus(3)
-    },1000)
-</script>
+    <script src="split-inputs.js" onload="splitInputs.init({loadedStyles:true});"></script>
 </body>
 </html>
