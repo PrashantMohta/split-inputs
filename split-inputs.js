@@ -40,14 +40,25 @@ class splitInput{
         }
     }
 
-    keydown($event){
+    keydown($event,android,target){
+        let key = $event.key;
+        let index = $event.target.splitInput.index;
+
+        if($event.keyCode === 229) {
+            if(android !== 'compat'){
+                let target = $event.target;
+                setTimeout(()=>{this.keydown($event,'compat',target)},10)
+                return
+            }
+            key = target.value.charAt($event.target.selectionStart - 1)
+            index = target.splitInput.index;
+        };
         if($event.ctrlKey || $event.metaKey) return setTimeout( () => this.updateValues(),0);
 
-        let index = $event.target.splitInput.index;
-        let isValid = this.tryIfValid($event.key);
-        if(isValid)  this._value[index] = $event.key;
+        let isValid = this.tryIfValid(key);
+        if(isValid)  this._value[index] = key;
 
-        if ($event.key === 'Backspace') {
+        if (key === 'Backspace') {
             if(this._value[index].length === 0) {
                 setTimeout( () => this.setFocus(-1,index),0);
             }
@@ -68,12 +79,21 @@ class splitInput{
     setFocus(n,index){
         if(index + n >= 0 && index + n < this.count ){
             this.boxes[index + n].focus();
+            let caretPos = 0;
+            // add caret at 0 position for android input bug
+            if(this.boxes[index + n].createTextRange) {
+                var range = this.boxes[index + n].createTextRange();
+                range.move('character', caretPos);
+                range.select();
+            } else if(this.boxes[index + n].selectionStart) {
+                this.boxes[index + n].setSelectionRange(caretPos, caretPos);
+            }
         }
     }
 
     paste($event){
         let index = $event.target.splitInput.index;
-        let paste = (event.clipboardData || window.clipboardData).getData('text');
+        let paste = ($event.clipboardData || window.clipboardData).getData('text');
         $event.target.blur();
 
         if( paste.length !== this.count || !this.isValid(paste)) return;
@@ -84,16 +104,27 @@ class splitInput{
         }
     }
 
-    keyup($event){
+    keyup($event,android,target){
+        let key = $event.key;
         let index = $event.target.splitInput.index;
-        setTimeout( () => this.updateValues(),0);
-        if($event.ctrlKey || $event.metaKey || $event.key === 'Backspace') return;
 
-        if($event.key === 'ArrowLeft') {
+        if($event.keyCode === 229) {
+            if(android !== 'compat'){
+                let target = $event.target;
+                setTimeout(()=>{this.keyup($event,'compat',target)},10)
+                return
+            }
+            key = target.value.charAt($event.target.selectionStart - 1)
+            index = target.splitInput.index;
+        };
+        setTimeout( () => this.updateValues(),0);
+        if($event.ctrlKey || $event.metaKey || key === 'Backspace') return;
+
+        if(key === 'ArrowLeft') {
             this.userControl = true;
             return this.setFocus(-1,index);
         }
-        if($event.key === 'ArrowRight') {
+        if(key === 'ArrowRight') {
             this.userControl = true;
             return this.setFocus(1,index);
         }
