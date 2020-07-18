@@ -1,7 +1,45 @@
 <html>
 <head>
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSIuOWVtIiBmb250LXNpemU9IjkwIj7wn46yPC90ZXh0Pjwvc3ZnPgo=">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A VanillaJS set of inputs for entering OTPs.">
+
     <title>Split Inputs</title>
+
+    <meta property="og:title" content="Split Inputs">
+    <meta property="og:description" content="A VanillaJS set of inputs for entering OTPs.">
+    <meta property="og:image" content="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSIuOWVtIiBmb250LXNpemU9IjkwIj7wn46yPC90ZXh0Pjwvc3ZnPgo=">
+    <meta property="og:url" content="https://prashantmohta.github.io/split-inputs/">
+
+    <style split-input>
+        :host([numeric-style]) input,split-input[numeric-style] input{
+            width: 50px;
+            height: 50px;
+            font-size:30px;
+            outline-color:#ff326a;
+            text-shadow: 0 0 0 #ff326a;
+            background: #354954;
+            font-family: monospace;
+        }
+        :host([alpha-style]) input,split-input[alpha-style] input{
+            width: 36px;
+            height: 36px;
+            font-size:18px;
+            outline-color: #32ffad;
+            text-shadow: 0 0 0 #32ffad;
+            background: #354954;
+            font-family: cursive;
+        }
+
+        :host([alnu-style]) input,split-input[alnu-style] input{
+            width: 36px;
+            height: 36px;
+            font-size:18px;
+            outline-color: #354954;
+            text-shadow: 0 0 0 #354954;
+            background: #fdfdfd;
+        }
+    </style>
     <style>
     body{
         background:#e6e6e6;
@@ -9,6 +47,8 @@
         font-family: sans-serif;
         padding:0;
         font-weight: normal;
+        font-size:14px;
+        line-height: 1.5;
     }
     h2{
         margin: 0;
@@ -47,7 +87,7 @@
         margin-top:0px;
     }
     a,a:visited{
-        color:inherit;
+        color:#ff326a;
         text-decoration: none;
         font-weight: normal;
     }
@@ -114,11 +154,11 @@
 <body>
     <div class="header">
         <h2> <span>Split</span> Inputs </h2>
-        <h3> A VanillaJS implementation of a set of inputs for entering OTPs </h3>
+        <h3> A VanillaJS set of inputs for entering OTPs </h3>
     </div>
     <div class="container">
         <div class="featurescontainer">
-            <h3> A VanillaJS implementation of a set of inputs for entering OTPs </h3>
+            <h3> A VanillaJS set of inputs for entering OTPs </h3>
             <h4>Features</h4>
             <ul>
                 <li> <a href="#behaviour">Basic Behaviour</a>
@@ -132,21 +172,21 @@
             <div class="democontainer">
                 <h4>Numeric Split Inputs</h4>
                 <div class="demoblock">
-                    <split-input count="4" type="numeric"></split-input>
+                    <split-input numeric-style count="4" type="numeric"></split-input>
                     Try entering numeric characters.
                 </div>
             </div>
             <div class="democontainer">
                 <h4>Alphabetical Split Inputs</h4>
                 <div class="demoblock">
-                    <split-input count="6" type="alpha"></split-input>
+                    <split-input alpha-style count="6" type="alpha"></split-input>
                     Try entering alphabets.
                 </div>
             </div>
             <div class="democontainer">
         <h4>Alphanumeric Split Inputs</h4>
         <div class="demoblock">
-            <split-input count="6" type="alphanumeric"></split-input>
+            <split-input alnu-style count="6" type="alphanumeric"></split-input>
             Try entering alphanumeric characters.
         </div>
     </div>
@@ -173,7 +213,8 @@
         </section>
         <section id="web">
             <h4>Web Component</h4>
-            fallback to regular DOM elements if Custom Element is unsupported
+            By default, split inputs tries to use a <a href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements">Custom Element</a> & <a href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM">Shadow DOM</a>.
+            However, it will fallback to regular DOM elements if Custom Elements are unsupported.
         </section>
     </article>
 

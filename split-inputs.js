@@ -224,7 +224,7 @@ class splitInputs {
         let componentStyles = document.createElement('link');
         componentStyles.rel = 'stylesheet';
         componentStyles.type = 'text/css';
-        componentStyles.href = './split-inputs.css';
+        componentStyles.href = 'https://prashantmohta.github.io/split-inputs/split-inputs.css';
         return componentStyles;
     }
 
