@@ -148,6 +148,21 @@
         background: #f3f3f3;
         box-shadow: 1px 1px 3px 1px #c7c7c73d;
     }
+    .code{
+        color: #3b3b38;
+        background: #fde5ed;
+        padding: 0 5px;
+        border: 1px solid #e6a5b6;
+        border-radius: 5px;
+        margin: 2px 5px;
+        display: inline-block;
+        font-family: monospace;
+        font-size: 12px;
+    }
+    .code.multi{
+        display: block;
+        word-break: break-all;
+    }
     </style>
     <link rel="stylesheet" href="split-inputs.css" type="text/css">
 </head>
@@ -161,11 +176,12 @@
             <h3> A VanillaJS set of inputs for entering OTPs </h3>
             <h4>Features</h4>
             <ul>
+                <li><a href="#basic-usage">Basic Usage</a>
                 <li> <a href="#behaviour">Basic Behaviour</a>
                 <li> <a href="#markup">Markup Options</a>
                 <li> <a href="#web">Web Component </a>
-                <li> Restyle Inputs
-                <li> Events & JS API
+                <li> <a href="#custom-style">Restyle Inputs</a>
+                <li> <a href="#js-api">Events & JS API</a>
             </ul>
         </div>
         <div class="demos">
@@ -194,6 +210,33 @@
     </div>
 
     <article>
+        <section id="basic-usage" style="margin-bottom: 15px;">
+            <h4>Basic Usage</h4>
+
+            To add Split Inputs in your page all you need to do is add the following script tag at the bottom of the page & define a split input
+            <div class="code multi">
+            &lt;script src="split-inputs.js" onload="splitInputs.init({});">&lt;/script&gt;
+            </div>
+            the object passed in <span class="code">splitInputs.init</span> can contain options to determine global behaviour.
+            default options are <span class="code">{disableCE:false,loadedStyles:false}</span> , which disable customElements mode regardless of browser support
+            and skip loading of default css styles ( in case you are going to fully override it or create your own css bundle).
+
+            <h5>To define a split input</h5>
+            <div class="code multi">
+            <br>
+            define a split input with 6 boxes & allows for digits only (easy setup)<br>
+            &lt;split-input count="6" type="numeric"&gt;&lt;/split-input&gt;<br>
+            <br>
+            define a split input with 4 boxes & allows for alphabets only & has an extra attribute to access when styling in css<br>
+            &lt;split-input custom-style count="4" type="alpha"&gt;&lt;/split-input&gt;<br>
+            <br>
+            define a split input with custom html inside & allows for entering alphanumeric characters (powerful for styling)<br>
+            &lt;split-input type="alphanumeric"><br>
+                &lt;input type="text"&gt;&lt;input type="text"&gt;&lt;input type="text"&gt;&lt;input type="text"&gt;<br>
+            &lt;/split-input&gt;<br>
+            <br>
+            </div>
+        </section>
         <section id="behaviour">
             <h4>Basic Behaviour</h4>
             <ul>
@@ -211,10 +254,51 @@
                 <li> Supports custom internal markup
             </ul>
         </section>
-        <section id="web">
+        <section id="web" style="margin-bottom: 15px;">
             <h4>Web Component</h4>
             By default, split inputs tries to use a <a href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements">Custom Element</a> & <a href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM">Shadow DOM</a>.
             However, it will fallback to regular DOM elements if Custom Elements are unsupported.
+        </section>
+        <section id="custom-style" style="margin-bottom: 15px;">
+            <h4>Restyle Inputs</h4>
+            Default split input styles are loaded into the page automatically if the options object does not have <span class="code">loadedStyles:true</span>,
+            but you may want to overwrite some of these styles with your own custom styles, In that scenario you may access the individual Input elements using
+            <span class="code">:host(selector) input</span> for shadowdom mode and <span class="code">split-input input</span>for DOM element mode
+            just make sure to add a <span class="code">split-input</span> attribute to the <span class="code">style</span> element so that the node can be cloned for shadowdom mode.
+            to style multiple split inputs on the same page, you can use a style tag similar to the following :
+            <div class="code multi">
+                &lt;style split-input&gt;<br>
+                    :host([numeric-style]) input,split-input[numeric-style] input{<br>
+                        // your styles go here<br>
+                    }<br>
+                &lt;/style&gt;<br>
+            </div>
+            this will apply your styles to any split-inputs with 'numeric-style' attribute added on them.
+        </section>
+        <section id="js-api">
+            <h4>Events & JS API</h4>
+
+            Split-Inputs exposes 2 custom events <span class="code">splitInputs.CHANGE_EVENT</span> and <span class="code">splitInputs.COMPLETE_EVENT</span>
+            fired when value in any of the input boxes changes & when all the boxes have a valid value respectively.
+            in the raised events you can access either the combined values in the split input or each of the values individually.
+            <div class="code multi">
+                // Event object<br>
+                {detail:{<br>
+                    value:'value in split-input', // string <br>
+                    boxes:['value ','in ','split-input'] // array of individual box values<br>
+                }}<br>
+                // attach a listener<br>
+                document.querySelector('split-input').addEventListener(splitInputs.CHANGE_EVENT,(v)=>console.log(v.detail));
+            </div>
+            <br>
+            Split-Inputs also has a simple api to set the value & focus on it as a whole, using <span class="code">element.splitInput.value</span> & <span class="code">element.splitInput.focus(n = 0)</span>
+            when using <span class="code">element.splitInput.value</span> you may assign to it or read from it, it will give you the concatenated value across all the individual boxes.
+            <span class="code">element.splitInput.focus(n = 0)</span> will focus on the nth box in the Split-Input , n has a default value of 0.
+            <div class="code multi">
+                // update value and grab focus on 3rd element<br>
+                document.querySelector('split-input').splitInput.value = "fill"<br>
+                document.querySelector('split-input').splitInput.focus(3)<br>
+            </div>
         </section>
     </article>
 
